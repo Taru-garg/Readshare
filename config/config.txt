@@ -1,0 +1,12 @@
+// This file shows the structure of .env file
+// Populate all the fields, remove this comment and rename this file to config.env
+// Ideally you should be able to run this app
+PORT=
+DB_USERNAME=
+DB_PASSWORD=
+SESSION_SECRET=
+DB_HOST=
+KAFKA_USERNAME=
+KAFKA_PASSWORD=
+KAFKA_BROKER_1_HOST=
+KAFKA_BROKER_1_PORT=
