@@ -24,11 +24,11 @@ module.exports = class KafkaManager {
       },
       ssl: true,
     };
-
+    this.runAs = runAs;
     this.kafka = new Kafka(this.kafkaConfig);
     if (runAs === "producer") this._producer = this.kafka.producer();
     /*
-     * TODO {taru.garg} : Improve the consumer code
+     * TODO: Improve the consumer code {taru.garg}
      * The consumer groupID should come from the function args as well
      * but meh! Just leaving it as it is for now
      */ else

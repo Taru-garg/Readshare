@@ -53,13 +53,14 @@ async function createTeam(req, res) {
     // however we need to update the teams of admin
     const user = await User.findOneAndUpdate(
       { _id: req.user._id },
-      { $addToSet: { teams: team._id } },
+      { $addToSet: { teams: [team._id] } },
       { $upsert: true }
     )
       .session(session)
       .exec();
+
     await session.commitTransaction();
-    console.log(user);
+
     // send invitations to users ( email format ) offload this to a task runner
     if (members.length > 0) {
       const kafka = KafkaManager.getInstance();
