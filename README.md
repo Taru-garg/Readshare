@@ -11,20 +11,20 @@ foolish and I would completely agree with you, if you were to point them out to 
 ## Running the application
 ```app.js``` is the main file of this project and that is what you'd need to run. However, it will only run if you have a few things configured (look at config.txt).
 ### Resources Required
-    1. MongoDB - The collection will be made automatically however you'd need the connection string.
-    2. Kafka cluster (host, port, username, password) with a topic named "team-mail-invite"
+- MongoDB - The collection will be made automatically however you'd need the connection string.
+- Kafka cluster (host, port, username, password) with a topic named "team-mail-invite"
 
 ### Startin the app
-    1. First you'd need to install all the packages required for this project. Which you can do by running the following command once in the project repo.
-    ```
-    npm install
-    ```
-    Right now, they are a bit of a mess I will maybe clean them up someday.
-    2. Once that is done you can run the following command to spin-up the appliaction
-    ```
-    node app.js
-    ```
-    or if you use nodemon
-    ```
-    nodemon run dev
-    ```
+1. First you'd need to install all the packages required for this project. Which you can do by running the following command once in the project repo.
+```bash
+npm install
+```
+Right now, they are a bit of a mess I will maybe clean them up someday.
+2. Once that is done you can run the following command to spin-up the appliaction
+```bash
+node app.js
+```
+or if you use nodemon
+```bash
+nodemon run dev
+```
