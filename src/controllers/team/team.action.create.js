@@ -47,13 +47,15 @@ async function createTeam(req, res) {
       ],
       { session }
     );
+    // FIXME: {taru.garg} .create returns an array of teams. But we need to return a single item.
+    // use team[0] to get the team is a temporary solution. There ideally should be a better way to do this.
 
     // rememeber users aren't updated yet, only once they have accepted the invitation
     // will they be added to the team and also only then the user's teams be updated with this team
     // however we need to update the teams of admin
     const user = await User.findOneAndUpdate(
       { _id: req.user._id },
-      { $addToSet: { teams: [team._id] } },
+      { $addToSet: { teams: [team[0]._id] } },
       { $upsert: true }
     )
       .session(session)
