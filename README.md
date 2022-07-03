@@ -15,12 +15,12 @@ foolish and I would completely agree with you, if you were to point them out to 
 - Kafka cluster (host, port, username, password) with a topic named "team-mail-invite"
 
 ### Startin the app
-1. First you'd need to install all the packages required for this project. Which you can do by running the following command once in the project repo.
+- First you'd need to install all the packages required for this project. Which you can do by running the following command once in the project repo.
 ```bash
 npm install
 ```
 Right now, they are a bit of a mess I will maybe clean them up someday.
-2. Once that is done you can run the following command to spin-up the appliaction
+- Once that is done you can run the following command to spin-up the appliaction
 ```bash
 node app.js
 ```

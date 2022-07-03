@@ -30,7 +30,7 @@ async function createTeam(req, res) {
     }
     // Admin is added to the db by default hence no need to add it in members
     // This is done to avoid sending an email to the admin when a team is created
-    // This should also be done in the frontend as well ( bothing like having too much security 😌)
+    // This should also be done in the frontend as well ( nothing like having too much security 😌)
     if (members.includes(req.user.id)) members.pop(req.user.id);
 
     // check links in req.body
@@ -47,7 +47,7 @@ async function createTeam(req, res) {
       ],
       { session }
     );
-    
+
     // FIXME: {taru.garg} .create returns an array of teams. But we need to return a single item.
     // use team[0] to get the team is a temporary solution. There ideally should be a better way to do this.
 
@@ -62,17 +62,22 @@ async function createTeam(req, res) {
       .session(session)
       .exec();
 
-    await session.commitTransaction();
-
     // send invitations to users ( email format ) offload this to a task runner
     if (members.length > 0) {
       const kafka = KafkaManager.getInstance();
+      await kafka.connect();
       console.log("Sending invitation to users, might take a while");
-      await kafka.send(
-        "team-mail-invite",
-        req.body.members.map((member) => ({ value: member }))
-      );
+      await kafka.producer.send({
+        topic: "team-mail-invite",
+        messages: members.map((member) => ({
+          value: JSON.stringify({
+            team: team[0]._id,
+            user: member,
+          }),
+        })),
+      });
     }
+    await session.commitTransaction();
     return res.sendStatus(200);
   } catch (err) {
     console.log(err);

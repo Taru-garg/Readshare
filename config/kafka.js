@@ -9,10 +9,7 @@ module.exports = class KafkaManager {
 
   constructor(runAs = "producer") {
     console.info(`Starting Kafka as a ${runAs}`);
-    console.info("Connecting to Kafka on : ");
-    console.info(
-      `${process.env.KAFKA_BROKER_1_HOST}:${process.env.KAFKA_BROKER_1_PORT}`
-    );
+    console.info(`Connecting to Kafka on : ${process.env.KAFKA_BROKER_1_HOST}:${process.env.KAFKA_BROKER_1_PORT}`);
     this.kafkaConfig = {
       brokers: [
         `${process.env.KAFKA_BROKER_1_HOST}:${process.env.KAFKA_BROKER_1_PORT}`,
@@ -26,26 +23,29 @@ module.exports = class KafkaManager {
     };
     this.runAs = runAs;
     this.kafka = new Kafka(this.kafkaConfig);
-    if (runAs === "producer") this._producer = this.kafka.producer();
+    if (this.runAs === "producer") {
+      this._producer = this.kafka.producer();
+    }
     /*
      * TODO: Improve the consumer code {taru.garg}
      * The consumer groupID should come from the function args as well
      * but meh! Just leaving it as it is for now
-     */ else
-      this._consumer = this.kafka.consumer({ groupId: "kafka-consumer-group" });
+     */ else {
+      this._consumer = this.kafka.consumer({ groupId: "$GROUP_NAME" });
+     }
     this.isConnectedProducer = false;
     this.isConnectedConsumer = false;
   }
 
-  static get producer() {
+  get producer() {
     return this._producer;
   }
 
-  static get consumer() {
+  get consumer() {
     return this._consumer;
   }
 
-  static getInstance(runAs) {
+  static getInstance(runAs = "producer") {
     if (!this.instance) {
       this.instance = new KafkaManager(runAs);
     }
@@ -54,13 +54,13 @@ module.exports = class KafkaManager {
 
   async connect() {
     if (this.runAs === "producer") {
-      await this.connectProducer();
+      await this._connectProducer();
     } else {
-      await this.connectConsumer();
+      await this._connectConsumer();
     }
   }
 
-  async connectProducer() {
+  async _connectProducer() {
     console.log("Checking if kafka producer is connected");
     try {
       if (!this.isConnectedProducer) {
@@ -75,7 +75,7 @@ module.exports = class KafkaManager {
     }
   }
 
-  async connectConsumer() {
+  async  _connectConsumer() {
     console.log("Checking if kafka consumer is connected");
     try {
       if (!this.isConnectedConsumer) {
@@ -86,18 +86,6 @@ module.exports = class KafkaManager {
       this.isConnectedConsumer = true;
     } catch (error) {
       console.log("Couldn't connect to Kafka");
-      console.log(error);
-    }
-  }
-
-  async send(topic, messages) {
-    try {
-      await this.connect();
-      const result = await this._producer.send({
-        topic,
-        messages: messages,
-      });
-    } catch (error) {
       console.log(error);
     }
   }
