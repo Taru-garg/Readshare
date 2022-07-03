@@ -5,7 +5,7 @@ const { Schema, model } = require("mongoose");
 const teamSchema = new Schema(
   {
     name: { type: String, required: true, message: "Name Required." },
-    admin: { type: Schema.Types.ObjectId, required: true },
+    admin: { type: Schema.Types.ObjectId, required: true, index: true },
     members: [{ type: Schema.Types.ObjectId, required: true }],
     links: [
       {

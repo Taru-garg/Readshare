@@ -31,8 +31,8 @@ async function createTeam(req, res) {
     // Admin is added to the db by default hence no need to add it in members
     // This is done to avoid sending an email to the admin when a team is created
     // This should also be done in the frontend as well ( nothing like having too much security 😌)
-    if (members.includes(req.user.id)) members.pop(req.user.id);
-
+    members = members.filter((member) => member.toString() !== req.user.id);
+    console.log(members);
     // check links in req.body
     const links = req.body.links ? req.body.links : [];
 

@@ -10,10 +10,10 @@
  *
  */
 const dotenv = require("dotenv");
-const KafkaManager = require("./kafka");
-const teamInviteHandler = require("./consumer-handlers/team-invite-handler");
+const KafkaManager = require("../../config/kafka");
+const {invite, handleAccept} = require("./consumer-handlers/team-mail-invite.handler");
 
-dotenv.config({ path: "config.env" });
+dotenv.config({ path: "../../config/config.env" });
 
 const kafkaManager = KafkaManager.getInstance("consumer");
 
@@ -28,7 +28,7 @@ const run = async () => {
     eachMessage: async ({ topic, partition, message }) => {
       switch (topic) {
         case "team-mail-invite":
-          await teamInviteHandler(message);
+          await invite(message);
           break;
         default:
           console.log(`Unknown topic ${topic}`);
