@@ -7,7 +7,7 @@ module.exports = class KafkaManager {
   static _producer = null;
   static _consumer = null;
 
-  constructor(runAs = "producer") {
+  constructor(runAs = "producer", host, port, username, password) {
     console.info(`Starting Kafka as a ${runAs}`);
     console.info(`Connecting to Kafka on : ${process.env.KAFKA_BROKER_1_HOST}:${process.env.KAFKA_BROKER_1_PORT}`);
     this.kafkaConfig = {
@@ -45,7 +45,7 @@ module.exports = class KafkaManager {
     return this._consumer;
   }
 
-  static getInstance(runAs = "producer") {
+  static getInstance(runAs = "producer", host, port, username, password) {
     if (!this.instance) {
       this.instance = new KafkaManager(runAs);
     }
