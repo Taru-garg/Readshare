@@ -82,12 +82,13 @@ async function createTeam(req, res) {
           value: JSON.stringify({
             team: team[0]._id,
             user: member,
+            teamName: team[0].name,
+            inviter: req.user._id,
           }),
         })),
       });
 
       console.log(`Sent ${res.length} messages`);
-
     }
     await session.commitTransaction();
     return res.sendStatus(200);
