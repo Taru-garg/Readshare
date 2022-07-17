@@ -6,16 +6,14 @@ const { v4: uuidv4 } = require("uuid");
 
 async function invite(message) {
   const { team, user } = JSON.parse(message.value.toString());
-  console.log(`[consumer] Received invite for team ${team} and user ${user}`);
   const inviteId = uuidv4();
 
   /*
    * Maybe would need to make it static
    */
-
   const email = await getEmailfromId(user);
 
-  const transporter =  nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     service: "hotmail",
     auth: {
       user: process.env.OUTLOOK_MAIL_USER,
@@ -25,11 +23,10 @@ async function invite(message) {
 
   // setup e-mail data
   const mailOptions = {
-    from: `"Our Code World " ${process.env.OUTLOOK_MAIL_USER}`, // sender address (who sends)
+    from: `"ReadShare " ${process.env.OUTLOOK_MAIL_USER}`, // sender address (who sends)
     to: `${email}`, // list of receivers (who receives)
-    subject: "Hello", // Subject line
-    text: "Hello world ", // plaintext body
-    html: "<b>Hello world </b><br> This is the first email sent with Nodemailer in Node.js", // html body
+    subject: "Join Team on Readshare", // Subject line
+    html: "", // html body
   };
 
   // send mail with defined transport object
