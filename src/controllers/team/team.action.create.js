@@ -27,10 +27,11 @@ async function createTeam(req, res) {
       const validationResult = await validateMembers(req.body.members);
       if (!validationResult.success)
         return res.status(400).json({ errors: validationResult.errors });
-      if (null in validationResult.results)
+      if (validationResult.results.includes(null)) {
         return res
           .status(400)
           .json({ errors: [{ msg: "Invalid members present." }] });
+      }
       members = validationResult.results;
     }
     /*
@@ -81,9 +82,9 @@ async function createTeam(req, res) {
         messages: members.map((member) => ({
           value: JSON.stringify({
             team: team[0]._id,
-            user: member,
+            userId: member,
             teamName: team[0].name,
-            inviter: req.user._id,
+            inviterId: req.user._id,
           }),
         })),
       });

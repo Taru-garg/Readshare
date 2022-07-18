@@ -3,6 +3,8 @@
 const { Kafka } = require("kafkajs");
 
 module.exports = class KafkaManager {
+  // there always ever be one single instance of kafka
+  // don't know if this is the best way to do it
   static instance = null;
   static _producer = null;
   static _consumer = null;

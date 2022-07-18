@@ -10,6 +10,7 @@ const {
   addmemberValidator,
   getTeamValidator,
 } = require("./validator-team");
+const { inviteValidator } = require("./validator-invite");
 
 function createValidationFor(route) {
   switch (route) {
@@ -27,6 +28,9 @@ function createValidationFor(route) {
 
     case "getTeams":
       return getTeamValidator();
+
+    case "acceptInvite":
+      return inviteValidator();
 
     default:
       return [];

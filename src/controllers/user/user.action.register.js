@@ -17,7 +17,7 @@ module.exports = async function registerUser(req, res) {
     });
     await newUser.save({ session });
     await session.commitTransaction();
-    return res.status(200).json({ msg: "User created" });
+    return res.status(201).json({ msg: "User created" });
   } catch (err) {
     await session.abortTransaction();
     return res.status(400).json({ errors: [{ msg: err.message }] });

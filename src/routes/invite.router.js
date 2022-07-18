@@ -15,7 +15,7 @@ const router = express.Router();
 router.get(
   "/invite/:id",
   isAuthenticated,
-  createValidationFor("createTeam"),
+  createValidationFor("acceptInvite"),
   checkValidationResult
 );
 
