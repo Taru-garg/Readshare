@@ -4,13 +4,13 @@ const { param } = require("express-validator");
 
 const inviteValidator = () => {
   return [
-    param("id").isMongoId(),
+    param("id").isUUID(),
     param("id").custom(async (id, { req }) => {
-      const invite = await Invite.findById(id);
+      const invite = await Invite.findOne({ inviteId: id });
       if (!invite) {
         throw new Error("Invite not found");
       }
-      if (invite.userId !== req.user.id) {
+      if (invite.sentTo.toString() !== req.user.id) {
         throw new Error("Invalid invite");
       }
     }),

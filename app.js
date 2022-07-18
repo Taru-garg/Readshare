@@ -14,6 +14,7 @@ const RedisStore = require("connect-redis");
 const linkRouter = require("./src/routes/link.router");
 const teamRouter = require("./src/routes/team.router");
 const userRouter = require("./src/routes/user.router");
+const inviteRouter = require("./src/routes/invite.router");
 
 /* Load the configuration */
 dotenv.config({ path: "./config/config.env" });
@@ -62,7 +63,6 @@ app.use(
   })
 );
 
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -70,6 +70,7 @@ app.use(passport.session());
 app.use("/", linkRouter);
 app.use("/", teamRouter);
 app.use("/", userRouter);
+app.use("/", inviteRouter);
 
 /*Base route for redirects */
 app.get("/", (req, res) => {
