@@ -25,6 +25,7 @@ const kafkaManager = KafkaManager.getInstance(
   process.env.KAFKA_USERNAME,
   process.env.KAFKA_PASSWORD
 );
+const { get_db } = require("../../config/db");
 
 const run = async () => {
   const topic = "team-mail-invite";
@@ -55,4 +56,8 @@ process.on("exit", async () => {
   await kafkaManager.consumer.disconnect();
 });
 
-run().catch((e) => console.error(`[consumer] ${e.message}`, e));
+get_db().then(
+  run().catch(
+    (e) => console.error(`[consumer] ${e.message}`, e)
+  )
+);
