@@ -15,6 +15,8 @@ const {
   invite,
   handleAccept,
 } = require("./consumer-handlers/team-mail-invite.handler");
+const nodemailer = require("nodemailer");
+const { mailTransportConfig } = require("./config");
 
 dotenv.config({ path: "../../config/config.env" });
 
@@ -28,20 +30,36 @@ const kafkaManager = KafkaManager.getInstance(
 const { get_db } = require("../../config/db");
 
 const run = async () => {
-  const topic = "team-mail-invite";
+  const mailTransport = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: process.env.OUTLOOK_MAIL_USER,
+      pass: process.env.OUTLOOK_MAIL_PASSWORD,
+    },
+  });
+
+  mailTransport.verify(function (error, success) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Server is ready to take our messages");
+    }
+  });
+
   await kafkaManager.connect();
   await kafkaManager.consumer.subscribe({
-    topics: [topic],
+    topics: ["team-mail-invite"],
     fromBeginning: true,
   });
-  /*
-   * TODO: {taru.garg} Check if possible to use Promise.all() here
-   */
+
   await kafkaManager.consumer.run({
-    eachMessage: async ({ topic, partition, message }) => {
+    eachMessage: async ({ topic, _, message }) => {
       switch (topic) {
         case "team-mail-invite":
-          await invite(message);
+          const mail = await invite(message);
+          await mailTransport.sendMail(mail);
+
           break;
         default:
           console.log(`Unknown topic ${topic}`);
@@ -51,13 +69,4 @@ const run = async () => {
   });
 };
 
-process.on("exit", async () => {
-  console.log("Disconnecting from kafka");
-  await kafkaManager.consumer.disconnect();
-});
-
-get_db().then(
-  run().catch(
-    (e) => console.error(`[consumer] ${e.message}`, e)
-  )
-);
+get_db().then(run().catch((e) => console.error(`[consumer] ${e.message}`, e)));

@@ -31,6 +31,7 @@ router.post(
   checkValidationResult,
   user.register
 );
+
 router.delete("/logout", isAuthenticated, user.logout);
 
 module.exports = router;
