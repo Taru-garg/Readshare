@@ -28,3 +28,6 @@ or if you use nodemon
 ```bash
 nodemon run dev
 ```
+
+#### Notes
+- The logout functionality is currently broken. It should be fixed once there is a new stable version on passport-js
