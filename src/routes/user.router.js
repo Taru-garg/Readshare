@@ -14,7 +14,7 @@ const {
 } = require("../controllers/validators/validator");
 
 router.post(
-  "/login",
+  "/user/login",
   isNotAuthenticated,
   createValidationFor("login"),
   checkValidationResult,
@@ -25,13 +25,13 @@ router.post(
 );
 
 router.post(
-  "/register",
+  "/user/register",
   isNotAuthenticated,
   createValidationFor("register"),
   checkValidationResult,
   user.register
 );
 
-router.delete("/logout", isAuthenticated, user.logout);
+router.delete("/user/logout", isAuthenticated, user.logout);
 
 module.exports = router;
