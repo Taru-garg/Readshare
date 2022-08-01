@@ -13,7 +13,7 @@ const { invite } = require("../controllers/invite/accept.action");
 const router = express.Router();
 
 router.get(
-  "/invite/:id",
+  "/invite/verify/:id",
   isAuthenticated,
   createValidationFor("acceptInvite"),
   checkValidationResult,

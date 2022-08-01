@@ -16,7 +16,6 @@ const {
   handleAccept,
 } = require("./consumer-handlers/team-mail-invite.handler");
 const nodemailer = require("nodemailer");
-const { mailTransportConfig } = require("./config");
 
 dotenv.config({ path: "../../config/config.env" });
 

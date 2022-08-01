@@ -10,17 +10,17 @@ const {
 } = require("../controllers/validators/validator");
 
 router.post(
-  "/createTeam",
+  "/team/create",
   isAuthenticated,
   createValidationFor("createTeam"),
   checkValidationResult,
   team.createTeam
 );
 
-router.delete("/deleteTeam", isAuthenticated, team.deleteTeam);
+router.delete("/team/delete", isAuthenticated, team.deleteTeam);
 
 router.post(
-  "/addmember",
+  "/team/add/member",
   isAuthenticated,
   createValidationFor("addmember"),
   checkValidationResult,
@@ -29,7 +29,7 @@ router.post(
 router.delete("/removemember", isAuthenticated, team.removemember);
 
 router.get(
-  "/getTeams",
+  "/team",
   isAuthenticated,
   createValidationFor("getTeams"),
   checkValidationResult,
