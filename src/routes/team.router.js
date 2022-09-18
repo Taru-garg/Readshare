@@ -17,7 +17,7 @@ router.post(
   team.createTeam
 );
 
-router.delete("/team/delete", isAuthenticated, team.deleteTeam);
+router.delete("/team/delete/:id", isAuthenticated, team.deleteTeam);
 
 router.post(
   "/team/add/member",
@@ -26,14 +26,21 @@ router.post(
   checkValidationResult,
   team.addmember
 );
-router.delete("/removemember", isAuthenticated, team.removemember);
+
+router.delete("/team/delete/member", isAuthenticated, team.removemember);
 
 router.get(
-  "/team",
+  "/teams",
   isAuthenticated,
-  createValidationFor("getTeams"),
-  checkValidationResult,
   team.getTeams
 );
+
+// router.get(
+//   "/teams/:id",
+//   isAuthenticated,
+//   createValidationFor("getParticularTeam"),
+//   checkValidationResult,
+//   team.get
+// )
 
 module.exports = router;

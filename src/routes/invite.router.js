@@ -8,7 +8,7 @@ const {
   createValidationFor,
   checkValidationResult,
 } = require("../controllers/validators/validator");
-const { invite } = require("../controllers/invite/accept.action");
+const { accept } = require("../controllers/invite/accept.action");
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.get(
   isAuthenticated,
   createValidationFor("acceptInvite"),
   checkValidationResult,
-  invite
+  accept,
 );
 
 module.exports = router;

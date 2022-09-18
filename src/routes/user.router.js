@@ -14,6 +14,14 @@ const {
 } = require("../controllers/validators/validator");
 
 router.post(
+  "/user/register",
+  isNotAuthenticated,
+  createValidationFor("register"),
+  checkValidationResult,
+  user.register
+);
+
+router.post(
   "/user/login",
   isNotAuthenticated,
   createValidationFor("login"),
@@ -22,14 +30,6 @@ router.post(
     successRedirect: "/",
     failureMessage: true,
   })
-);
-
-router.post(
-  "/user/register",
-  isNotAuthenticated,
-  createValidationFor("register"),
-  checkValidationResult,
-  user.register
 );
 
 router.delete("/user/logout", isAuthenticated, user.logout);

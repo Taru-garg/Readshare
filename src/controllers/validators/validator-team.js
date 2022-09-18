@@ -41,12 +41,7 @@ const addmemberValidator = () => {
   ];
 };
 
-const getTeamValidator = () => {
-  return [];
-};
-
 module.exports = {
   teamValidator: teamValidator,
   addmemberValidator: addmemberValidator,
-  getTeamValidator: getTeamValidator,
 };
