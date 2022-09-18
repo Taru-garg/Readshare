@@ -17,6 +17,7 @@ module.exports = {
       process.env.HOST,
       process.env.PORT
     );
+
     const [invitee, inviter] = await Promise.all([
       await getUserfromUserId(userId),
       await getUserfromUserId(inviterId),
@@ -26,7 +27,7 @@ module.exports = {
     session.startTransaction();
     try {
       const invite = new Invite({
-        sentTo: userId,
+        sentTo: mongoose.Types.ObjectId(userId),
         associatedTeam: team,
         inviteId: inviteId,
       });
@@ -44,6 +45,7 @@ module.exports = {
 
       await invite.save({ session });
       await session.commitTransaction();
+      console.log("Sent mail successfully");
       return mail;
     } catch (e) {
       await session.abortTransaction();

@@ -28,7 +28,7 @@ module.exports = {
   },
   getNewInvite: (host, port) => {
     const inviteId = uuidv4();
-    const uniqueLink = `${host}:${port}/invite/${inviteId}`;
+    const uniqueLink = `${host}:${port}/invite/verify/${inviteId}`;
     return [inviteId, uniqueLink];
   },
 };

@@ -19,7 +19,12 @@ const inviteSchema = new Schema(
       required: true,
       index: true,
     },
-    expiresAt: { type: Date, default: Date.now, index: { expires: "5m" } },
+    createdAt: {
+      type: Date,
+      expires: "4h",
+      index: true,
+      default: Date.now,
+    },
   },
   { timestamps: true }
 );
