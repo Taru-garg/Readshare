@@ -7,7 +7,7 @@ const inviteSchema = new Schema(
       index: true,
       type: Schema.Types.ObjectId,
       required: true,
-      message: "Email Required.",
+      message: "Sent to required.",
     },
     associatedTeam: {
       type: Schema.Types.ObjectId,

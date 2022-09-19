@@ -2,7 +2,7 @@
 
 const Team = require("../../../models/Team");
 const User = require("../../../models/User");
-const { validateMember, isAdmin } = require("./team.util");
+const { validateMembers, isAdmin } = require("./team.util");
 const mongoose = require("mongoose");
 
 module.exports = {
@@ -15,9 +15,10 @@ async function addMemberToTeam(req, res) {
 
   try {
     const { teamId, emails } = req.body;
-    const team = Team.findById(teamId, { session });
+    const team = await Team.findById(teamId).session(session).exec();
 
-    const validationResult = await validateMember(emails);
+    const validationResult = await validateMembers(emails);
+
     if (!validationResult.success)
       return res.status(400).json(validationResult.errors);
 
