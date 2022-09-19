@@ -3,6 +3,7 @@
 const Team = require("../../../models/Team");
 const User = require("../../../models/User");
 const { validateMembers, isAdmin } = require("./team.util");
+const { invite } = require("../invite/invite.action.invite")
 const mongoose = require("mongoose");
 
 module.exports = {
@@ -33,28 +34,10 @@ async function addMemberToTeam(req, res) {
       return res.status(400).json({ errors: [{ msg: "Not authorized." }] });
     }
 
-    if (usersToadd.includes(null)) {
-      const nonExistentUsers = [];
+    if (usersToadd.includes(null)) throw new Error("Invalid members in the list")
 
-      usersToadd.forEach((user, index) => {
-        if (!user) nonExistentUsers.push(emails[index]);
-      });
-
-      return res.status(400).json({
-        errors: [{ msg: "Invalid Users present.", unmapped: nonExistentUsers }],
-      });
-    }
-
-    // Update team and user
-    await Team.updateOne(
-      { $addToSet: { members: { $each: usersToadd } } },
-      { session }
-    );
-
-    await User.updateMany(
-      { email: { $in: emails } },
-      { $addToSet: { teams: teamId } },    { session }
-    );
+    // just send the invite request here and the rest is already handeled
+    await invite(usersToadd, team, req.user._id);
     
     await session.commitTransaction();
     return res.sendStatus(200);

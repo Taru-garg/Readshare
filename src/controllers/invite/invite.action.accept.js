@@ -1,19 +1,19 @@
 const Invite = require("../../../models/Invite");
 const Team = require("../../../models/Team");
 const User = require("../../../models/User");
-const mongoose = require("mongoose");
 
 module.exports = {
   accept: async (req, res) => {
     const { id } = req.params;
     try {
       const invite = await Invite.findOne({ inviteId: id });
-      
+
       await Team.findOneAndUpdate(
         { _id: invite.associatedTeam },
         { $addToSet: { members: invite.sentTo } },
         { upsert: true }
       ).exec();
+
       await User.findOneAndUpdate(
         { _id: invite.sentTo },
         { $addToSet: { teams: invite.associatedTeam} }

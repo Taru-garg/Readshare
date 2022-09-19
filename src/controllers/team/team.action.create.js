@@ -9,8 +9,7 @@ const Team = require("../../../models/Team");
 const User = require("../../../models/User");
 const { validateMembers } = require("./team.util");
 const mongoose = require("mongoose");
-const KafkaManager = require("../../../config/kafka");
-
+const { invite } = require("../invite/invite.action.invite");
 module.exports = {
   createTeam: createTeam,
 };
@@ -44,7 +43,7 @@ async function createTeam(req, res) {
     // check links in req.body
     const links = req.body.links ? req.body.links : [];
 
-    const team = await Team.create(
+    const [team] = await Team.create(
       [
         {
           name: name,
@@ -66,31 +65,15 @@ async function createTeam(req, res) {
      */
     const user = await User.findOneAndUpdate(
       { _id: req.user._id },
-      { $addToSet: { teams: team[0]._id } },
+      { $addToSet: { teams: team._id } },
       { $upsert: true }
     )
       .session(session)
       .exec();
 
     // send invitations to users ( email format ) offload this to a task runner
-    if (members.length > 0) {
-      const kafka = KafkaManager.getInstance();
-      await kafka.connect();
-      console.log("Sending invitation to users, might take a while");
-      const res = await kafka.producer.send({
-        topic: "team-mail-invite",
-        messages: members.map((member) => ({
-          value: JSON.stringify({
-            team: team[0]._id,
-            userId: member,
-            teamName: team[0].name,
-            inviterId: req.user._id,
-          }),
-        })),
-      });
+    if (members)  await invite(members, team, req.user._id);
 
-      console.log(`Sent ${res.length} messages`);
-    }
     await session.commitTransaction();
     return res.sendStatus(200);
   } catch (err) {
