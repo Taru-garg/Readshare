@@ -1,11 +1,9 @@
 "use strict";
 
 module.exports = async function logoutUser(req, res) {
-  try {
-    req.logout();
+  req.logout(function(err) {
+    if (err) { return res.sendStatus(400); }
     req.session.destroy();
-    return res.status(200).json({ msg: "Logged out" });
-  } catch (err) {
-    return res.status(400).json({ errors: [{ msg: err.message }] });
-  }
+    res.redirect('/');
+  });    
 };

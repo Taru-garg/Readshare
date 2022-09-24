@@ -14,12 +14,13 @@ async function removeMemberFromTeam(req, res) {
     _id: mongoose.Types.ObjectId(teamId),
   });
 
+  if (!isValidTeam) throw new Error("Team not found");
+  
   const isValidMember = await Team.find(
     { email: userEmail },
     { teams: { $in: [mongoose.Types.ObjectId(teamId)] } }
   );
 
-  if (!isValidTeam) throw new Error("Team not found");
   if (!isValidMember) throw new Error("Member not found");
 
   try {
