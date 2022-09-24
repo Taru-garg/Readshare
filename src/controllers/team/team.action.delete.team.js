@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 
 module.exports = {
   deleteTeam: deleteTeam,
-  removeMemberFromTeam: removeMemberFromTeam,
 };
 
 async function deleteTeam(req, res) {
@@ -39,8 +38,4 @@ async function removeTeamFromUsers(teamId) {
     $pull: { teams: mongoose.Types.ObjectId(teamId) },
   });
   return res;
-}
-
-async function removeMemberFromTeam(req, res) {
-  res.send("remove member from team");
 }

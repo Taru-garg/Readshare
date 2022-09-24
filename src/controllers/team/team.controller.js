@@ -1,14 +1,15 @@
 "use strict";
 
-const { deleteTeam, removeMemberFromTeam } = require("./team.action.delete");
-const { createTeam } = require("./team.action.create");
-const { addMemberToTeam } = require("./team.action.addmember");
-const getTeams  = require("./team.action.getTeams");
+const { getTeams } = require("./team.action.get.teams");
+const { deleteTeam } = require("./team.action.delete.team");
+const { createTeam } = require("./team.action.create.team");
+const { addMemberToTeam } = require("./team.action.create.member");
+const { removeMemberFromTeam } = require("./team.action.delete.member");
 
 module.exports = {
+  getTeams: getTeams,
   createTeam: createTeam,
   deleteTeam: deleteTeam,
   addmember: addMemberToTeam,
   removemember: removeMemberFromTeam,
-  getTeams: getTeams,
 };
