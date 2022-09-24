@@ -36,7 +36,8 @@ async function validateMembers(members) {
 
 async function isAdmin(userId, teamId) {
   const team = await Team.findById(teamId);
-  return team.admin.toString() === userId;
+  if (team) return team.admin.toString() === userId;
+  return false;
 }
 
 async function isUserInTeam(userId, teamId) {
