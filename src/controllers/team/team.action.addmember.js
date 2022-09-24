@@ -38,6 +38,7 @@ async function addMemberToTeam(req, res) {
 
     await session.commitTransaction();
     return res.sendStatus(200);
+    
   } catch (err) {
     await session.abortTransaction();
     return res.status(400).json({ errors: [{ msg: err.message }] });
