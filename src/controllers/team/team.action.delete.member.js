@@ -15,7 +15,7 @@ async function removeMemberFromTeam(req, res) {
   });
 
   if (!isValidTeam) throw new Error("Team not found");
-  
+
   const isValidMember = await Team.find(
     { email: userEmail },
     { teams: { $in: [mongoose.Types.ObjectId(teamId)] } }
@@ -23,6 +23,11 @@ async function removeMemberFromTeam(req, res) {
 
   if (!isValidMember) throw new Error("Member not found");
 
+  /*
+   * There are two components to removing a member from a team
+   * first we need to remove the member from the team object in mongoDB
+   * second we need to remove the team from the members object in mongoDB
+   */
   try {
   } catch (err) {
   } finally {
