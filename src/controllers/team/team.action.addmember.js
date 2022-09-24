@@ -1,8 +1,8 @@
 "use strict";
 
 const Team = require("../../../models/Team");
-const User = require("../../../models/User");
-const { validateMember, isAdmin } = require("./team.util");
+const { validateMembers, isAdmin } = require("./team.util");
+const { invite } = require("../invite/invite.action.invite");
 const mongoose = require("mongoose");
 
 module.exports = {
@@ -15,46 +15,27 @@ async function addMemberToTeam(req, res) {
 
   try {
     const { teamId, emails } = req.body;
-    const team = Team.findById(teamId, { session });
+    const team = await Team.findById(teamId).session(session).exec();
 
-    const validationResult = await validateMember(emails);
+    const validationResult = await validateMembers(emails);
+
     if (!validationResult.success)
-      return res.status(400).json(validationResult.errors);
+      throw new Error(validationResult.errors);
 
     const usersToadd = validationResult.results;
 
     // validate team and user
-    if (!team) {
-      return res.status(400).json({ errors: [{ msg: "Team not found." }] });
-    }
+    if (!team)
+      throw new Error("Team not found");
 
-    if (!(await isAdmin(req.user.id, teamId))) {
-      return res.status(400).json({ errors: [{ msg: "Not authorized." }] });
-    }
+    if (!(await isAdmin(req.user.id, teamId)))
+      throw new Error("Not authorized to add members to team");
 
-    if (usersToadd.includes(null)) {
-      const nonExistentUsers = [];
+    if (usersToadd.includes(null))
+      throw new Error("Invalid members in the list");
 
-      usersToadd.forEach((user, index) => {
-        if (!user) nonExistentUsers.push(emails[index]);
-      });
+    await invite(usersToadd, team, req.user.id);
 
-      return res.status(400).json({
-        errors: [{ msg: "Invalid Users present.", unmapped: nonExistentUsers }],
-      });
-    }
-
-    // Update team and user
-    await Team.updateOne(
-      { $addToSet: { members: { $each: usersToadd } } },
-      { session }
-    );
-
-    await User.updateMany(
-      { email: { $in: emails } },
-      { $addToSet: { teams: teamId } },    { session }
-    );
-    
     await session.commitTransaction();
     return res.sendStatus(200);
   } catch (err) {

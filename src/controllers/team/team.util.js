@@ -2,10 +2,12 @@
 
 const User = require("../../../models/User");
 const Team = require("../../../models/Team");
+const mongoose = require("mongoose");
 
 module.exports = {
   validateMembers: validateMembers,
-  isAdmin : isAdmin,
+  isAdmin: isAdmin,
+  isUserInTeam: isUserInTeam,
 };
 
 async function validateMembers(members) {
@@ -18,7 +20,6 @@ async function validateMembers(members) {
     // exists method returns null if user not found else the object id
     let results = await Promise.all(taskList);
     results = results.map((result) => (result ? result._id : null));
-    console.log(results);
     return {
       success: true,
       results: results,
@@ -28,12 +29,31 @@ async function validateMembers(members) {
     return {
       success: false,
       results: [],
-      errors: [{ msg: err.message }],
+      errors: err.message,
     };
   }
 }
 
 async function isAdmin(userId, teamId) {
   const team = await Team.findById(teamId);
-  return team.admin === userId;
+  return team.admin.toString() === userId;
+}
+
+async function isUserInTeam(userId, teamId) {
+  const pipline = [
+    {
+      $match: {
+        $and: [
+          { _id: mongoose.Types.ObjectId(teamId) },
+          {
+            members: {
+              $in: [ mongoose.Types.ObjectId(userId) ],
+            },
+          },
+        ],
+      },
+    },
+  ];
+  const res = await Team.aggregate(pipline);
+  return res;
 }

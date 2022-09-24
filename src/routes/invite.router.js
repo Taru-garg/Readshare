@@ -8,7 +8,7 @@ const {
   createValidationFor,
   checkValidationResult,
 } = require("../controllers/validators/validator");
-const { accept } = require("../controllers/invite/accept.action");
+const { accept } = require("../controllers/invite/invite.action.accept");
 
 const router = express.Router();
 
