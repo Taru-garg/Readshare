@@ -19,14 +19,12 @@ async function addMemberToTeam(req, res) {
 
     const validationResult = await validateMembers(emails);
 
-    if (!validationResult.success)
-      throw new Error(validationResult.errors);
+    if (!validationResult.success) throw new Error(validationResult.errors);
 
     const usersToadd = validationResult.results;
 
     // validate team and user
-    if (!team)
-      throw new Error("Team not found");
+    if (!team) throw new Error("Team not found");
 
     if (!(await isAdmin(req.user.id, teamId)))
       throw new Error("Not authorized to add members to team");
@@ -38,7 +36,6 @@ async function addMemberToTeam(req, res) {
 
     await session.commitTransaction();
     return res.sendStatus(200);
-    
   } catch (err) {
     await session.abortTransaction();
     return res.status(400).json({ errors: [{ msg: err.message }] });

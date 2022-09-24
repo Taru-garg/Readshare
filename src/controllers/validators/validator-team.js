@@ -41,7 +41,15 @@ const addmemberValidator = () => {
   ];
 };
 
+const removeMemberValidator = () => {
+  return [
+    check("teamId", "Please provide a valid Team Id").exists().isMongoId(),
+    check("email", "Please provide a valid email address").exists().isEmail(),
+  ];
+};
+
 module.exports = {
   teamValidator: teamValidator,
   addmemberValidator: addmemberValidator,
+  removeMemberValidator: removeMemberValidator,
 };

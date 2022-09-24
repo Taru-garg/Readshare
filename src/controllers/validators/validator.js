@@ -8,7 +8,7 @@ const {
 const {
   teamValidator,
   addmemberValidator,
-  getTeamValidator,
+  removeMemberValidator,
 } = require("./validator-team");
 const { inviteValidator } = require("./validator-invite");
 
@@ -32,6 +32,9 @@ function createValidationFor(route) {
     case "acceptInvite":
       return inviteValidator();
 
+    case "removemember":
+      return removeMemberValidator();
+    
     default:
       return [];
   }

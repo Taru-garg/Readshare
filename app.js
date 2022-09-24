@@ -8,7 +8,6 @@ const { get_db } = require("./config/db");
 const session = require("express-session");
 const authConfig = require("./src/controllers/auth/auth.controller");
 const MongoStore = require("connect-mongo");
-const RedisStore = require("connect-redis");
 
 /* Register the routes */
 const linkRouter = require("./src/routes/link.router");

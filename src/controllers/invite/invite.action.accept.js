@@ -20,9 +20,9 @@ module.exports = {
 
       const isThereATeam = await Team.exists({ _id: invite.associatedTeam });
 
-      if( !isThereATeam ) { 
+      if (!isThereATeam) {
         invite.remove();
-        return res.sendStatus(404); 
+        return res.sendStatus(404);
       }
 
       await Team.findOneAndUpdate(
