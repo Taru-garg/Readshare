@@ -24,13 +24,9 @@ async function createTeam(req, res) {
     let members = [];
     if (req.body.members) {
       const validationResult = await validateMembers(req.body.members);
-      if (!validationResult.success)
-        return res.status(400).json({ errors: validationResult.errors });
-      if (validationResult.results.includes(null)) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid members present." }] });
-      }
+      if (!validationResult.success) throw new Error(validationResult.errors);
+      if (validationResult.results.includes(null)) throw new Error("Invalid members present in request");
+      
       members = validationResult.results;
     }
     /*
@@ -77,7 +73,6 @@ async function createTeam(req, res) {
     await session.commitTransaction();
     return res.sendStatus(200);
   } catch (err) {
-    console.log(err);
     await session.abortTransaction();
     return res.status(400).json({ errors: [{ msg: err.message }] });
   } finally {
