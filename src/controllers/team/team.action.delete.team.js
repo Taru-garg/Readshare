@@ -6,10 +6,15 @@ const mongoose = require("mongoose");
 
 module.exports = {
   deleteTeam: deleteTeam,
-  removeMemberFromTeam: removeMemberFromTeam,
 };
 
 async function deleteTeam(req, res) {
+  /*
+   * There are three cases to consider when deleting a team from the database
+   * 1. We need to delete the team from the database
+   * 2. We need to delete the team for all the users in the team ( in the user object )
+   * 3. Finally, we need to invalidate all the invites for this team ( this has been handeled in the invites section)
+   */
   const { id } = req.body;
   try {
     if (await isAdmin(req.user.id, id)) {
@@ -39,8 +44,4 @@ async function removeTeamFromUsers(teamId) {
     $pull: { teams: mongoose.Types.ObjectId(teamId) },
   });
   return res;
-}
-
-async function removeMemberFromTeam(req, res) {
-  res.send("remove member from team");
 }

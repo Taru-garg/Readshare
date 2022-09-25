@@ -8,8 +8,6 @@ const {
   createValidationFor,
   checkValidationResult,
 } = require("../controllers/validators/validator");
-const {isAdmin } = require("../controllers/team/team.util");
-
 
 router.post(
   "/team/create",
@@ -29,13 +27,14 @@ router.post(
   team.addmember
 );
 
-router.delete("/team/delete/member", isAuthenticated, team.removemember);
-
-router.get(
-  "/teams",
+router.delete(
+  "/team/delete/member",
   isAuthenticated,
-  team.getTeams
+  createValidationFor("removemember"),
+  checkValidationResult,
+  team.removemember
 );
 
+router.get("/teams", isAuthenticated, team.getTeams);
 
 module.exports = router;
