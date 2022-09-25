@@ -8,6 +8,7 @@ module.exports = {
   validateMembers: validateMembers,
   isAdmin: isAdmin,
   isUserInTeam: isUserInTeam,
+  isValidTeam: isValidTeam,
 };
 
 async function validateMembers(members) {
@@ -41,6 +42,7 @@ async function isAdmin(userId, teamId) {
 }
 
 async function isUserInTeam(userId, teamId) {
+
   const pipline = [
     {
       $match: {
@@ -55,6 +57,15 @@ async function isUserInTeam(userId, teamId) {
       },
     },
   ];
+
   const res = await Team.aggregate(pipline);
   return res;
 }
+
+async function isValidTeam(teamId) {
+  const isValidTeam = await Team.exists({
+    _id: mongoose.Types.ObjectId(teamId),
+  });
+  return isValidTeam;
+}
+

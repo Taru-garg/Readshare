@@ -27,7 +27,13 @@ router.post(
   team.addmember
 );
 
-router.delete("/team/delete/member", isAuthenticated, team.removemember);
+router.delete(
+  "/team/delete/member",
+  isAuthenticated,
+  createValidationFor("removemember"),
+  checkValidationResult,
+  team.removemember
+);
 
 router.get("/teams", isAuthenticated, team.getTeams);
 

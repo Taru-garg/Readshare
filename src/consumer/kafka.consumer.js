@@ -58,7 +58,6 @@ const run = async () => {
         case "team-mail-invite":
           const mail = await invite(message);
           await mailTransport.sendMail(mail);
-
           break;
         default:
           console.log(`Unknown topic ${topic}`);
