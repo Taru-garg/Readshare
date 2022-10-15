@@ -42,7 +42,7 @@ async function validationCheck(requestorId, userId, teamId) {
   if (!(await isAdmin(requestorId, teamId)))
     throw new Error("Only admins can remove members from teams");
 
-  if (!(await isValidTeam(teamId))) throw new Error("Team not found");
+  await isValidTeam(teamId);
 
   if (!(await isUserInTeam(userId, teamId)))
     throw new Error("Member not found");

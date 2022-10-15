@@ -66,6 +66,7 @@ async function isValidTeam(teamId) {
   const isValidTeam = await Team.exists({
     _id: mongoose.Types.ObjectId(teamId),
   });
+  if(!isValidTeam) throw new Error("Team does not exists");
   return isValidTeam;
 }
 
