@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+message EmailInvite {
+    string teamId    = 1;
+    string userId    = 2;
+    string teamName  = 3; // this is redundant as the team name can be fetched from the team id
+    string inviterId = 4;
+}
