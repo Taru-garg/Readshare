@@ -30,7 +30,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "postmark": "^3.0.12",
-    "protobufjs": "^7.1.2",
+    "protobufjs": "^7.2.4",
     "redis": "^4.1.0",
     "uuid": "^8.3.2"
   }
